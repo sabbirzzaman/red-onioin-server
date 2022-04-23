@@ -62,6 +62,30 @@ const run = async () => {
                 console.log('No Item deleted');
             }
         });
+
+        // update a recipe
+        app.put('/recipe/:id', async (req, res) => {
+            const id = req.params.id;
+            const updateUser = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: {
+                    name: updateUser.name,
+                    image: updateUser.image,
+                    instruction: updateUser.instruction,
+                },
+            };
+
+            const result = await recipeCollection.updateOne(
+                filter,
+                updateDoc,
+                options
+            );
+            res.send(result);
+            console.log(`Recipe Updated`);
+        });
     } finally {
         // await client.close();
     }
